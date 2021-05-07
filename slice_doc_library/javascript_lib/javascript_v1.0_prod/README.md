@@ -1,12 +1,17 @@
 # docxlib_js
 
-DocxlibJs - JavaScript client for docxlib_js
+DocxlibJs - JavaScript client for docxlib_js.\
 This library can be used to transfer files from one storage service to another.\
 Currently integrated data sources -
 Google Drive
 \
 Currently integrated data destinations -
-S3 buckets
+S3 buckets\
+
+**NOTE** : Digimocker is a just a mock service that we have integrated with, can only be used for testing
+out/playing with the lib.\
+
+Visit [this link](https://github.com/Crio-Winter-of-Doing-2021/SLICE-T3/tree/main/slice_doc_library/javascript_lib/javascript_v1.0_prod) for an exhaustive documentation + examples of using this library.
 
 Install it via:
 
