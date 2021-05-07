@@ -1,6 +1,6 @@
 {
   "name": "docxlib_js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "This package can be used to transfer files from one cloud storage service to another.",
   "license": "Unlicense",
   "main": "dist/index.js",
@@ -55,6 +55,6 @@
   "author": "Preeti Swati, Sahil Rajpal",
   "repository": {
     "type": "git",
-    "url": "https://github.com/P-Swati/docxlib.git"
+    "url": "https://github.com/P-Swati/docxlib/tree/main/slice_doc_library/javascript_lib/javascript_v1.0_prod"
   }
 }
