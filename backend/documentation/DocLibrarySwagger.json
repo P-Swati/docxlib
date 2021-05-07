@@ -1,0 +1,546 @@
+{
+    "openapi" : "3.0.0",
+    "servers": [
+      {
+         "url": "https://docxlib-backend.herokuapp.com/"
+      }
+   ],
+    "info": {
+       "description": "This is api documentation for slice document library. Team `SLICE - T3`",
+       "version": "1.0.0",
+       "title": "docxlib_js"
+    },
+    "tags": [
+       {
+          "name": "Sources",
+          "description": "Apis for Datasource"
+       },
+       {
+          "name": "Destinations",
+          "description": "Apis for Storage Services"
+       },
+       {
+          "name": "Transfer",
+          "description": "Apis for Transferring file from data source to storage destination"
+       }
+    ],
+    "paths": {
+       "/source/digimocker/auth": {
+          "get": {
+             "tags": [
+                "Sources"
+             ],
+             "summary": "Get Digimocker Auth Url",
+             "description": "",
+             "operationId": "digimockerSourceAuth",
+             "responses": {
+                "200": {
+                    "description": "Auth url generated successfully",
+                    "content" : {
+                        "application/json" : {
+                           "schema": {
+                              "$ref": "#/components/schemas/gdriveUrl"
+                           }
+                        }
+                    }
+                 }
+             }
+          }
+       },
+       "/source/digimocker/oauth2callback": {
+          "post": {
+             "tags": [
+                "Sources"
+             ],
+             "summary": "Returns oauth token from digimocker login url",
+             "description": "",
+             "operationId": "digiMockerSourceAuthCallback",
+             "requestBody": {
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "type" : "object",
+                        "properties" : {
+                           "email": {
+                              "type" : "string"
+                           },
+                           "password": {
+                              "type" : "string"
+                           }
+                        },
+                        "required" : ["email","password"]
+                     }
+                  }
+               }
+            },
+             "responses": {
+                "200": {
+                     "description": "Token generated",
+                     "content" : {
+                        "application/json" : {
+                           "schema": {
+                              "$ref": "#/components/schemas/digiMockerToken"
+                           }
+                        }
+                     }
+                },
+                "500": {
+                   "description": "Internal server error"
+                }
+             }
+          }
+       },
+       "/source/digimocker/listFiles": {
+          "post": {
+             "tags": [
+                "Sources"
+             ],
+             "summary": "Get list of all files in authenticated user's digimocker account",
+             "description": "",
+             "operationId": "digimockerSourceListFiles",
+             "requestBody": {
+               "content": {
+                  "application/json": {
+                     "schema" : {
+                        "type" : "object",
+                        "properties" : {
+                           "email": {
+                              "type" : "string"
+                           },
+                           "password": {
+                              "type" : "string"
+                           },
+                           "token" : {
+                              "$ref": "#/components/schemas/digiMockerToken"
+                           }
+                        },
+                        "required" : ["email","password","token"]
+                     }
+                  }
+               }
+            },
+             "responses": {
+                "200": {
+                   "description": "List of files fetched Successfully",
+                   "content" : {
+                     "application/json" : {
+                        "schema": {
+                           "$ref": "#/components/schemas/digiMockerFileList"
+                       }
+                     }
+                  }
+                }
+             }
+          }
+       },
+
+       "/source/gdrive/auth": {
+         "post": {
+            "tags": [
+               "Sources"
+            ],
+            "summary": "Get Google Drive Auth Url",
+            "description": "",
+            "operationId": "gDriveSourceAuth",
+            "requestBody": {
+              "content": {
+                 "application/json": {
+                    "schema": {
+                       "type" : "object",
+                       "properties" : {
+                          "gdriveClientCredentials" : {
+                           "$ref": "#/components/schemas/gdriveClientCredentials"
+                          }
+                       }
+                     }
+                 }
+              }
+           },
+            "responses": {
+               "200": {
+                   "description": "Auth url generated successfully",
+                   "content" : {
+                       "application/json" : {
+                          "schema": {
+                             "$ref": "#/components/schemas/gdriveUrl"
+                          }
+                       }
+                   }
+                }
+            }
+         }
+      },
+      "/source/gdrive/oauth2callback": {
+         "post": {
+            "tags": [
+               "Sources"
+            ],
+            "summary": "Returns oauth token from google callback url",
+            "description": "",
+            "operationId": "gDriveSourceAuthCallback",
+            "parameters": [
+               {
+                  "name": "code",
+                  "in": "query",
+                  "description": "Auth Code sent upon gdrive auth",
+                  "required": true
+               }
+            ],
+            "requestBody": {
+              "content": {
+                 "application/json": {
+                    "schema": {
+                       "type" : "object",
+                       "properties" : {
+                          "gdriveClientCredentials" : {
+                           "$ref": "#/components/schemas/gdriveClientCredentials"
+                          }
+                       }
+                    }
+                 }
+              }
+           },
+            "responses": {
+               "200": {
+                    "description": "Token generated",
+                    "content" : {
+                       "application/json" : {
+                          "schema": {
+                             "$ref": "#/components/schemas/gdriveToken"
+                          }
+                       }
+                    }
+               },
+               "500": {
+                  "description": "Internal server error"
+               }
+            }
+         }
+      },
+      "/source/gdrive/listFiles": {
+         "post": {
+            "tags": [
+               "Sources"
+            ],
+            "summary": "Get list of all files in authenticated user's google drive",
+            "description": "",
+            "operationId": "gDriveSourceListFiles",
+            "requestBody": {
+              "content": {
+                 "application/json": {
+                    "schema": {
+                       "type" : "object",
+                       "properties" : {
+                          "token" : {
+                           "$ref": "#/components/schemas/gdriveToken"
+                          },
+                          "gdriveClientCredentials" : {
+                           "$ref": "#/components/schemas/gdriveClientCredentials"
+                          }
+                       }
+                    }
+                 }
+              }
+           },
+            "responses": {
+               "200": {
+                  "description": "List of files fetched Successfully",
+                  "content" : {
+                    "application/json" : {
+                       "schema": {
+                          "$ref": "#/components/schemas/gdriveFileList"
+                      }
+                    }
+                 }
+               }
+            }
+         }
+      },
+       "/destination/s3/listBuckets": {
+          "post": {
+             "tags": [
+                "Destinations"
+             ],
+             "summary": "List all s3 buckets associated with given aws credentials",
+             "description": "",
+             "operationId": "s3StorageListBuckets",
+             "requestBody": {
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "$ref": "#/components/schemas/s3Credentials"
+                     }
+                  }
+               }
+            },
+             "responses": {
+                "200": {
+                   "description": "List of buckets fetched Successfully",
+                   "content" : {
+                     "application/json" : {
+                        "schema": {
+                           "$ref": "#/components/schemas/s3BucketList"
+                       }
+                     }
+                  }
+                }
+             }
+          }
+       },
+       "/docTransfer": {
+        "post": {
+           "tags": [
+              "Transfer"
+           ],
+           "summary": "Endpoint to transfer chosen file from a source to destination storage",
+           "description": "",
+           "operationId": "fileTransfer",
+           "requestBody" : {
+               "required" : true,
+               "content" : {
+                  "application/json" : {
+                     "schema" : {
+                        "$ref": "#/components/schemas/fileTransfer"
+                     }
+                  },
+                  "multipart/form-data" : {
+                     "schema" : {
+                        "$ref": "#/components/schemas/fileTransferFromLocalStorage"
+                     }
+                  }
+               }
+            },
+           "responses": {
+              "200": {
+                 "description": "File uploaded Successfully",
+                 "content" : {
+                     "application/json" : {
+                        "schema": {
+                           "$ref": "#/components/schemas/fileTransferResult"
+                        }
+                     }
+                  }
+              }
+           }
+        }
+     }
+    },
+    "components" : {
+      "schemas": {
+         "gdriveUrl": {
+            "type": "object",
+            "properties": {
+               "authUrl": {
+                  "type": "string"
+               },
+               "message": {
+                  "type": "string"
+               }
+            },
+            "required" : ["authUrl","message"]
+         },
+         "gdriveToken": {
+            "type": "object",
+            "properties": {
+               "access_token": {
+                  "type": "string"
+               },
+               "refresh_token": {
+                  "type": "string"
+               },
+               "scope": {
+                  "type": "string"
+               },
+               "token_type": {
+                  "type": "string"
+               },
+               "expiry_date": {
+                  "type": "number"
+               }
+            },
+            "required" : ["access_token","refresh_token","scope","token_type","expiry_date"]
+         },
+         "gdriveClientCredentials": {
+            "type": "object",
+            "properties": {
+               "client_id": {
+                  "type": "string"
+               },
+               "client_secret": {
+                  "type": "string"
+               },
+               "redirect_uris": {
+                  "type": "string"
+               }
+            },
+            "required" : ["client_id","client_secret","redirect_uris"]
+         },
+         "gdriveFile": {
+            "type": "object",
+            "properties": {
+               "kind": {
+                  "type": "string"
+               },
+               "id": {
+                  "type": "string"
+               },
+               "name": {
+                  "type": "string"
+               },
+               "mimeType": {
+                  "type": "string"
+               },
+               "iconLink": {
+                  "type": "string"
+               }
+            },
+            "required" : ["kind","id","name","mimeType","iconLink"]
+         },
+         "gdriveFileList": {
+            "type": "object",
+            "properties": {
+               "files": {
+                  "type": "array",
+                  "items": {
+                     "$ref": "#/components/schemas/gdriveFile"
+                  }
+               }
+            },
+            "required" : ["files"]
+         },
+         "s3Credentials": {
+            "type" : "object",
+            "properties": {
+               "ACCESS_KEY": {
+                  "type": "string"
+               },
+               "SECRET_KEY": {
+                  "type": "string"
+               }
+            },
+            "required" : ["ACCESS_KEY","SECRET_KEY"]
+         },
+         "s3BucketList": {
+            "type": "object",
+            "properties": {
+               "data": {
+                  "type": "array",
+                  "items": {
+                     "type": "object",
+                     "properties": {
+                        "Name": {
+                           "type": "string"
+                        },
+                        "CreationDate": {
+                           "type": "string"
+                        }
+                     },
+                     "required" : ["Name","CreationDate"]
+                  }
+               }
+            },
+            "required" : ["data"]
+         },
+         "digiMockerToken": {
+            "type": "object",
+            "properties": {
+               "access_token": {
+                  "type": "string"
+               }
+            },
+            "required" : ["access_token"]
+         },
+         "digimockerFile": {
+            "type": "object",
+            "properties": {
+               "exported": {
+                  "type": "string"
+               },
+               "_id": {
+                  "type": "string"
+               },
+               "name": {
+                  "type": "string"
+               },
+               "email": {
+                  "type": "string"
+               },
+               "url": {
+                  "type": "string"
+               },
+               "identifier": {
+                  "type": "string"
+               },
+               "__v": {
+                  "type": "integer"
+               }
+            },
+            "required" : ["exported","_id","name","email","url","identifier","__v"]
+         },
+         "digiMockerFileList": {
+            "type": "object",
+            "properties": {
+               "files": {
+                  "type": "array",
+                  "items": {
+                     "$ref": "#/components/schemas/digimockerFile"
+                  }
+               }
+            },
+            "required" : ["files"]
+         },
+         "fileTransfer": {
+            "type": "object",
+            "properties": {
+               "sourceConfig": {
+                  "type": "object",
+                  "properties": {
+                     "name": {
+                        "type": "string"
+                     },
+                     "extendedData": {
+                        "type": "object"
+                        }
+                  },
+                  "required" : ["name","extendedData"]
+               },
+               "destinationConfig": {
+                  "type": "object",
+                  "properties": {
+                     "name": {
+                        "type": "string"
+                     },
+                     "extendedData": {
+                        "type": "object"
+                     }
+                  },
+                  "required" : ["name","extendedData"]
+               }
+            },
+            "required" : ["sourceConfig","destinationConfig"]
+         },
+         "fileTransferFromLocalStorage": {
+            "type": "object",
+            "properties": {
+               "files": {
+                  "type" : "string",
+                  "format" : "binary"
+               },
+               "reqJson": {
+                  "type" : "object"
+               }
+            },
+            "required" : ["files","reqJson"]
+         },
+         "fileTransferResult": {
+            "type" : "object",
+            "properties" : {
+               "result" : {
+                  "type" : "object"
+               }
+            },
+            "required" : ["result"]
+         }
+       }
+    }
+ }
