@@ -109,7 +109,7 @@ const FileUpload = () => {
             let fileName = selectedFile['files'][i].name
             let selectedBucket = bucketName[0]
             data.append('files', selectedFile['files'][i]);
-            data.append('reqJson', '{\n    "sourceConfig": {\n        "name": "LocalStorage"\n    },\n    "destinationConfig": {\n        "name": "AwsS3",\n        "extendedData": {\n            "fileName": "fileName",\n            "bucketName": "slice-aws-bucket",\n            "credentials": {\n   "ACCESS_KEY": "AKIA57SBI3SBWSUJK4FO",\n                "SECRET_KEY": "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"\n            }\n        }\n    }\n}');
+            data.append('reqJson', '{\n    "sourceConfig": {\n        "name": "LocalStorage"\n    },\n    "destinationConfig": {\n        "name": "AwsS3",\n        "extendedData": {\n            "fileName": "fileName",\n            "bucketName": "BUCKET NAME HERE",\n            "credentials": {\n   "ACCESS_KEY": "",\n                "SECRET_KEY": ""\n            }\n        }\n    }\n}');
             console.log(data)
             axios({
                 method: "post",
